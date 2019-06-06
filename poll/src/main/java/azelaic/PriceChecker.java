@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
@@ -34,6 +33,20 @@ public class PriceChecker {
 
         }
 
+        try {
+            String availibityStatus = driver.findElement(Locators.shippingNotAvailableMsg).getText();
+            String shippingUnavailableMsg = "This product is not currently available for shipment in your area.";
+            if (!shippingUnavailableMsg.equals(availibityStatus)) {
+                System.out.println("This product now ships to your area!");
+
+            } else {
+                System.out.println("Nothing has changed");
+            }
+        } catch (AssertionError ae) {
+            System.out.println(ae);
+            System.out.println("Shipping availability status has changed");
+        }
+
         driver.findElement(Locators.pycnogenol).click();
         Thread.sleep(2000);
 
@@ -46,9 +59,9 @@ public class PriceChecker {
             // Check if the price is under a certain threshhold
 
             if (price <= 9.0) {
-                // Notif that the price has changed
+                System.out.print("The price is now" + price);
             } else {
-                // Notif that the price hasn't changed
+                System.out.println("Nothing has changed");
             }
 
         } catch (Exception e) {
